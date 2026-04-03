@@ -45,7 +45,7 @@ function submit() {
     <AppLayout :breadcrumbs="breadcrumbs">
         <Head :title="`所属マスタ 編集 - ${dept.name}`" />
 
-        <div class="mx-auto max-w-lg p-4">
+        <div class="max-w-2xl p-6">
             <div class="rounded-lg border bg-card p-6 shadow-sm">
                 <h1 class="mb-6 text-xl font-bold">所属 編集</h1>
 
@@ -70,14 +70,14 @@ function submit() {
                     <div class="flex flex-col gap-1.5">
                         <Label for="parent_id">親所属</Label>
                         <Select
-                            :model-value="form.parent_id ?? ''"
-                            @update:model-value="(v) => (form.parent_id = v || null)"
+                            :model-value="form.parent_id ?? '__none__'"
+                            @update:model-value="(v) => (form.parent_id = v === '__none__' ? null : v)"
                         >
                             <SelectTrigger id="parent_id" :class="{ 'border-destructive': form.errors.parent_id }">
                                 <SelectValue placeholder="（なし）" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">（なし）</SelectItem>
+                                <SelectItem value="__none__">（なし）</SelectItem>
                                 <SelectItem
                                     v-for="parent in parents"
                                     :key="parent.id"
