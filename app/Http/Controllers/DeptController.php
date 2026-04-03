@@ -105,9 +105,9 @@ class DeptController extends Controller
     public function export(Request $request): BinaryFileResponse
     {
         $export = new DeptsExport(
-            search: $request->get('search', ''),
-            sort: $request->get('sort', 'id'),
-            direction: $request->get('direction', 'asc'),
+            search: $request->string('search')->toString(),
+            sort: $request->string('sort', 'id')->toString(),
+            direction: $request->string('direction', 'asc')->toString(),
         );
 
         $filename = '所属マスタ_' . now()->format('YmdHis') . '.xlsx';
