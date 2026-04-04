@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 社員マスタ
     Route::get('employees/export', [EmployeeController::class, 'export'])->name('employees.export');
     Route::resource('employees', EmployeeController::class)->except(['show']);
+
+    // 得意先マスタ
+    Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
+    Route::resource('customers', CustomerController::class)->except(['show']);
 });
 
 require __DIR__.'/settings.php';
