@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Building2, FolderGit2, LayoutGrid, Users, Building, Package } from 'lucide-vue-next';
+import { BookOpen, Building2, FolderGit2, LayoutGrid, Users, Building, Package, Settings2 } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -28,24 +28,14 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: '所属マスタ',
-        href: DeptController.index.url(),
-        icon: Building2,
-    },
-    {
-        title: '社員マスタ',
-        href: EmployeeController.index.url(),
-        icon: Users,
-    },
-    {
-        title: '得意先マスタ',
-        href: CustomerController.index.url(),
-        icon: Building,
-    },
-    {
-        title: '商品マスタ',
-        href: ProductController.index.url(),
-        icon: Package,
+        title: '設定',
+        icon: Settings2,
+        children: [
+            { title: '所属マスタ', href: DeptController.index.url(), icon: Building2 },
+            { title: '社員マスタ', href: EmployeeController.index.url(), icon: Users },
+            { title: '得意先マスタ', href: CustomerController.index.url(), icon: Building },
+            { title: '商品マスタ', href: ProductController.index.url(), icon: Package },
+        ],
     },
 ];
 
