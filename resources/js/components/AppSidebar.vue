@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Building2, FolderGit2, LayoutGrid, Users, Building, Package, Settings2 } from 'lucide-vue-next';
+import { BookOpen, Building2, FolderGit2, LayoutGrid, Users, Building, Package, Settings2, FileText } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -19,6 +19,7 @@ import DeptController from '@/actions/App/Http/Controllers/DeptController';
 import EmployeeController from '@/actions/App/Http/Controllers/EmployeeController';
 import CustomerController from '@/actions/App/Http/Controllers/CustomerController';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import QuoteController from '@/actions/App/Http/Controllers/QuoteController';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -26,6 +27,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: '見積',
+        href: QuoteController.index.url(),
+        icon: FileText,
     },
     {
         title: '設定',

@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -29,6 +30,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 商品マスタ
     Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
     Route::resource('products', ProductController::class)->except(['show']);
+
+    // 見積
+    Route::get('quotes/export', [QuoteController::class, 'exportMethod'])->name('quotes.export');
+    Route::resource('quotes', QuoteController::class);
 });
 
 require __DIR__.'/settings.php';
