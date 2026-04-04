@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
@@ -13,7 +14,7 @@ Route::inertia('/', 'Welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     // 所属マスタ
     Route::get('depts/export', [DeptController::class, 'export'])->name('depts.export');
