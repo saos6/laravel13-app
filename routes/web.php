@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -24,6 +25,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 得意先マスタ
     Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
     Route::resource('customers', CustomerController::class)->except(['show']);
+
+    // 商品マスタ
+    Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
+    Route::resource('products', ProductController::class)->except(['show']);
 });
 
 require __DIR__.'/settings.php';
