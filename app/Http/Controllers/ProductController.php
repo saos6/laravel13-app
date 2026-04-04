@@ -29,16 +29,16 @@ class ProductController extends Controller
             ->withQueryString();
 
         return Inertia::render('Products/Index', [
-            'products'   => $products,
-            'filters'    => [
-                'search'    => $search,
-                'sort'      => $sort,
+            'products' => $products,
+            'filters' => [
+                'search' => $search,
+                'sort' => $sort,
                 'direction' => $direction,
-                'per_page'  => (string) $perPage,
+                'per_page' => (string) $perPage,
             ],
             'categories' => Product::CATEGORIES,
-            'taxRates'   => Product::TAX_RATES,
-            'statuses'   => Product::STATUSES,
+            'taxRates' => Product::TAX_RATES,
+            'statuses' => Product::STATUSES,
         ]);
     }
 
@@ -46,8 +46,8 @@ class ProductController extends Controller
     {
         return Inertia::render('Products/Create', [
             'categories' => Product::CATEGORIES,
-            'taxRates'   => Product::TAX_RATES,
-            'statuses'   => Product::STATUSES,
+            'taxRates' => Product::TAX_RATES,
+            'statuses' => Product::STATUSES,
         ]);
     }
 
@@ -61,10 +61,10 @@ class ProductController extends Controller
     public function edit(Product $product): Response
     {
         return Inertia::render('Products/Edit', [
-            'product'    => $product,
+            'product' => $product,
             'categories' => Product::CATEGORIES,
-            'taxRates'   => Product::TAX_RATES,
-            'statuses'   => Product::STATUSES,
+            'taxRates' => Product::TAX_RATES,
+            'statuses' => Product::STATUSES,
         ]);
     }
 
@@ -91,7 +91,7 @@ class ProductController extends Controller
             direction: $request->string('direction', 'asc')->toString(),
         );
 
-        $filename = '商品マスタ_' . now()->format('YmdHis') . '.xlsx';
+        $filename = '商品マスタ_'.now()->format('YmdHis').'.xlsx';
 
         return Excel::download($export, $filename);
     }

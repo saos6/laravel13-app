@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Head } from '@inertiajs/vue3';
 import DeptController from '@/actions/App/Http/Controllers/DeptController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import DeptForm from '@/components/DeptForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Parent {

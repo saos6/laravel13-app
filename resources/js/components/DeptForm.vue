@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import InputError from '@/components/InputError.vue';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 interface Parent {
     id: number;
@@ -29,7 +35,7 @@ interface Props {
     processingLabel: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
     submit: [];
@@ -59,14 +65,23 @@ const emit = defineEmits<{
             <Label for="parent_id">親所属</Label>
             <Select
                 :model-value="form.parent_id ?? '__none__'"
-                @update:model-value="(v) => (form.parent_id = v === '__none__' ? null : v)"
+                @update:model-value="
+                    (v) => (form.parent_id = v === '__none__' ? null : v)
+                "
             >
-                <SelectTrigger id="parent_id" :class="{ 'border-destructive': form.errors.parent_id }">
+                <SelectTrigger
+                    id="parent_id"
+                    :class="{ 'border-destructive': form.errors.parent_id }"
+                >
                     <SelectValue placeholder="（なし）" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="__none__">（なし）</SelectItem>
-                    <SelectItem v-for="parent in parents" :key="parent.id" :value="String(parent.id)">
+                    <SelectItem
+                        v-for="parent in parents"
+                        :key="parent.id"
+                        :value="String(parent.id)"
+                    >
                         {{ parent.name }}
                     </SelectItem>
                 </SelectContent>

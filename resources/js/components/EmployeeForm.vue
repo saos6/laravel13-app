@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import InputError from '@/components/InputError.vue';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 interface Dept {
     id: number;
@@ -35,7 +41,7 @@ interface Props {
     processingLabel: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
     submit: [];
@@ -94,14 +100,23 @@ const emit = defineEmits<{
             <Label for="dept_id">所属</Label>
             <Select
                 :model-value="form.dept_id ?? '__none__'"
-                @update:model-value="(v) => (form.dept_id = v === '__none__' ? null : v)"
+                @update:model-value="
+                    (v) => (form.dept_id = v === '__none__' ? null : v)
+                "
             >
-                <SelectTrigger id="dept_id" :class="{ 'border-destructive': form.errors.dept_id }">
+                <SelectTrigger
+                    id="dept_id"
+                    :class="{ 'border-destructive': form.errors.dept_id }"
+                >
                     <SelectValue placeholder="（なし）" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="__none__">（なし）</SelectItem>
-                    <SelectItem v-for="dept in depts" :key="dept.id" :value="String(dept.id)">
+                    <SelectItem
+                        v-for="dept in depts"
+                        :key="dept.id"
+                        :value="String(dept.id)"
+                    >
                         {{ dept.name }}
                     </SelectItem>
                 </SelectContent>

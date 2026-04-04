@@ -21,10 +21,10 @@ class Customer extends Model
     ];
 
     public const PAYMENT_CYCLES = [
-        'monthly'   => '月払い',
+        'monthly' => '月払い',
         'bimonthly' => '隔月払い',
         'quarterly' => '四半期払い',
-        'annually'  => '年払い',
+        'annually' => '年払い',
     ];
 
     public function employee(): BelongsTo
@@ -57,13 +57,19 @@ class Customer extends Model
 
     public function getClosingDayLabelAttribute(): string
     {
-        if ($this->closing_day === null) return '';
+        if ($this->closing_day === null) {
+            return '';
+        }
+
         return $this->closing_day === 31 ? '末日' : "{$this->closing_day}日";
     }
 
     public function getPaymentDayLabelAttribute(): string
     {
-        if ($this->payment_day === null) return '';
+        if ($this->payment_day === null) {
+            return '';
+        }
+
         return $this->payment_day === 31 ? '末日' : "{$this->payment_day}日";
     }
 }

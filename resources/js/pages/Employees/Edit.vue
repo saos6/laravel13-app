@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Head } from '@inertiajs/vue3';
 import EmployeeController from '@/actions/App/Http/Controllers/EmployeeController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import EmployeeForm from '@/components/EmployeeForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Dept {
@@ -35,7 +35,9 @@ const form = useForm({
     code: props.employee.code,
     name: props.employee.name,
     name_kana: props.employee.name_kana ?? '',
-    dept_id: props.employee.dept_id ? String(props.employee.dept_id) : (null as string | null),
+    dept_id: props.employee.dept_id
+        ? String(props.employee.dept_id)
+        : (null as string | null),
     email: props.employee.email ?? '',
 });
 

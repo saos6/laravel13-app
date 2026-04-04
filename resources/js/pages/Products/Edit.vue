@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Head } from '@inertiajs/vue3';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import ProductForm from '@/components/ProductForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Product {

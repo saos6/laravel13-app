@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { CheckCircle2, AlertCircle } from 'lucide-vue-next';
+import { computed } from 'vue';
 import AppContent from '@/components/AppContent.vue';
 import AppShell from '@/components/AppShell.vue';
 import AppSidebar from '@/components/AppSidebar.vue';
@@ -18,7 +18,9 @@ withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const flash = computed(() => page.props.flash as { success: string | null; error: string | null });
+const flash = computed(
+    () => page.props.flash as { success: string | null; error: string | null },
+);
 </script>
 
 <template>
@@ -26,7 +28,10 @@ const flash = computed(() => page.props.flash as { success: string | null; error
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
-            <div v-if="flash.success || flash.error" class="px-4 pt-4 flex flex-col gap-2">
+            <div
+                v-if="flash.success || flash.error"
+                class="flex flex-col gap-2 px-4 pt-4"
+            >
                 <Alert
                     v-if="flash.success"
                     class="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200"

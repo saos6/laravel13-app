@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { ChevronRight } from 'lucide-vue-next';
 import {
@@ -30,11 +29,6 @@ function isChildActive(item: NavItem): boolean {
     return (item.children ?? []).some(
         (child) => child.href && isCurrentOrParentUrl(child.href),
     );
-}
-
-function useOpen(item: NavItem) {
-    const open = ref(isChildActive(item));
-    return open;
 }
 </script>
 
@@ -72,10 +66,19 @@ function useOpen(item: NavItem) {
                                 >
                                     <SidebarMenuSubButton
                                         as-child
-                                        :is-active="child.href ? isCurrentOrParentUrl(child.href) : false"
+                                        :is-active="
+                                            child.href
+                                                ? isCurrentOrParentUrl(
+                                                      child.href,
+                                                  )
+                                                : false
+                                        "
                                     >
                                         <Link :href="child.href ?? '#'">
-                                            <component :is="child.icon" v-if="child.icon" />
+                                            <component
+                                                :is="child.icon"
+                                                v-if="child.icon"
+                                            />
                                             <span>{{ child.title }}</span>
                                         </Link>
                                     </SidebarMenuSubButton>

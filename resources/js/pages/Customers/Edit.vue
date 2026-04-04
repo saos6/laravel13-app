@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Head } from '@inertiajs/vue3';
 import CustomerController from '@/actions/App/Http/Controllers/CustomerController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import CustomerForm from '@/components/CustomerForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Employee {
@@ -50,10 +50,16 @@ const form = useForm({
     phone: props.customer.phone ?? '',
     fax: props.customer.fax ?? '',
     email: props.customer.email ?? '',
-    employee_id: props.customer.employee_id ? String(props.customer.employee_id) : (null as string | null),
-    closing_day: props.customer.closing_day ? String(props.customer.closing_day) : (null as string | null),
+    employee_id: props.customer.employee_id
+        ? String(props.customer.employee_id)
+        : (null as string | null),
+    closing_day: props.customer.closing_day
+        ? String(props.customer.closing_day)
+        : (null as string | null),
     payment_cycle: props.customer.payment_cycle ?? (null as string | null),
-    payment_day: props.customer.payment_day ? String(props.customer.payment_day) : (null as string | null),
+    payment_day: props.customer.payment_day
+        ? String(props.customer.payment_day)
+        : (null as string | null),
     remarks: props.customer.remarks ?? '',
 });
 

@@ -18,14 +18,14 @@ class QuoteController extends Controller
 {
     public function index(Request $request): Response
     {
-        $search    = (string) $request->input('search', '');
-        $status    = (string) $request->input('status', '');
-        $sort      = $request->input('sort', 'quote_number');
+        $search = (string) $request->input('search', '');
+        $status = (string) $request->input('status', '');
+        $sort = $request->input('sort', 'quote_number');
         $direction = $request->input('direction', 'desc');
-        $perPage   = (int) $request->input('per_page', 10);
+        $perPage = (int) $request->input('per_page', 10);
 
         $allowedSorts = ['quote_number', 'quote_date', 'expiry_date', 'subject', 'status', 'total_amount', 'created_at'];
-        if (!in_array($sort, $allowedSorts, true)) {
+        if (! in_array($sort, $allowedSorts, true)) {
             $sort = 'quote_number';
         }
         $direction = $direction === 'desc' ? 'desc' : 'asc';
@@ -38,8 +38,8 @@ class QuoteController extends Controller
             ->withQueryString();
 
         return Inertia::render('Quotes/Index', [
-            'quotes'   => $quotes,
-            'filters'  => compact('search', 'status', 'sort', 'direction', 'per_page') + ['per_page' => (string) $perPage],
+            'quotes' => $quotes,
+            'filters' => compact('search', 'status', 'sort', 'direction') + ['per_page' => (string) $perPage],
             'statuses' => Quote::STATUSES,
         ]);
     }
@@ -57,9 +57,9 @@ class QuoteController extends Controller
 
         $validated['quote_number'] = Quote::generateQuoteNumber();
         [$subtotal, $taxAmount, $totalAmount] = $this->calculateTotals($items);
-        $validated['subtotal']      = $subtotal;
-        $validated['tax_amount']    = $taxAmount;
-        $validated['total_amount']  = $totalAmount;
+        $validated['subtotal'] = $subtotal;
+        $validated['tax_amount'] = $taxAmount;
+        $validated['total_amount'] = $totalAmount;
 
         $quote = Quote::create($validated);
         $this->syncItems($quote, $items);
@@ -73,7 +73,7 @@ class QuoteController extends Controller
         $quote->load(['customer', 'employee', 'items.product']);
 
         return Inertia::render('Quotes/Show', [
-            'quote'    => $quote,
+            'quote' => $quote,
             'statuses' => Quote::STATUSES,
         ]);
     }
@@ -98,8 +98,8 @@ class QuoteController extends Controller
         unset($validated['items']);
 
         [$subtotal, $taxAmount, $totalAmount] = $this->calculateTotals($items);
-        $validated['subtotal']     = $subtotal;
-        $validated['tax_amount']   = $taxAmount;
+        $validated['subtotal'] = $subtotal;
+        $validated['tax_amount'] = $taxAmount;
         $validated['total_amount'] = $totalAmount;
 
         $quote->update($validated);
@@ -119,14 +119,14 @@ class QuoteController extends Controller
 
     public function exportMethod(Request $request)
     {
-        $search    = (string) $request->input('search', '');
-        $status    = (string) $request->input('status', '');
-        $sort      = $request->input('sort', 'quote_number');
+        $search = (string) $request->input('search', '');
+        $status = (string) $request->input('status', '');
+        $sort = $request->input('sort', 'quote_number');
         $direction = $request->input('direction', 'desc');
 
         return Excel::download(
             new QuotesExport($search, $status, $sort, $direction),
-            '見積一覧_' . now()->format('Ymd_His') . '.xlsx'
+            '見積一覧_'.now()->format('Ymd_His').'.xlsx'
         );
     }
 
@@ -137,23 +137,23 @@ class QuoteController extends Controller
         return [
             'customers' => Customer::active()->orderBy('code')->get(['id', 'name']),
             'employees' => Employee::active()->orderBy('code')->get(['id', 'name']),
-            'products'  => Product::active()->orderBy('code')->get(['id', 'code', 'name', 'spec', 'unit', 'price', 'tax_rate']),
-            'statuses'  => Quote::STATUSES,
-            'taxRates'  => Product::TAX_RATES,
+            'products' => Product::active()->orderBy('code')->get(['id', 'code', 'name', 'spec', 'unit', 'price', 'tax_rate']),
+            'statuses' => Quote::STATUSES,
+            'taxRates' => Product::TAX_RATES,
         ];
     }
 
     private function calculateTotals(array $items): array
     {
-        $subtotal  = 0;
+        $subtotal = 0;
         $taxAmount = 0;
 
         foreach ($items as $item) {
-            $qty   = (float) ($item['quantity'] ?? 0);
+            $qty = (float) ($item['quantity'] ?? 0);
             $price = (float) ($item['unit_price'] ?? 0);
-            $rate  = (int) ($item['tax_rate'] ?? 10);
-            $amt   = round($qty * $price, 2);
-            $subtotal  += $amt;
+            $rate = (int) ($item['tax_rate'] ?? 10);
+            $amt = round($qty * $price, 2);
+            $subtotal += $amt;
             $taxAmount += round($amt * $rate / 100, 2);
         }
 
@@ -165,21 +165,21 @@ class QuoteController extends Controller
         $quote->items()->delete();
 
         foreach ($items as $i => $item) {
-            $qty   = (float) ($item['quantity'] ?? 0);
+            $qty = (float) ($item['quantity'] ?? 0);
             $price = (float) ($item['unit_price'] ?? 0);
 
             QuoteItem::create([
-                'quote_id'     => $quote->id,
-                'line_no'      => $i + 1,
-                'product_id'   => $item['product_id'] ?: null,
+                'quote_id' => $quote->id,
+                'line_no' => $i + 1,
+                'product_id' => $item['product_id'] ?: null,
                 'product_name' => $item['product_name'],
-                'spec'         => $item['spec'] ?? null,
-                'quantity'     => $qty,
-                'unit'         => $item['unit'] ?? null,
-                'unit_price'   => $price,
-                'tax_rate'     => $item['tax_rate'],
-                'amount'       => round($qty * $price, 2),
-                'remarks'      => $item['remarks'] ?? null,
+                'spec' => $item['spec'] ?? null,
+                'quantity' => $qty,
+                'unit' => $item['unit'] ?? null,
+                'unit_price' => $price,
+                'tax_rate' => $item['tax_rate'],
+                'amount' => round($qty * $price, 2),
+                'remarks' => $item['remarks'] ?? null,
             ]);
         }
     }

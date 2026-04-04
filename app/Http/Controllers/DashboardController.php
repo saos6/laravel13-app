@@ -42,16 +42,16 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'stats' => [
-                'thisMonthCount'    => (int) $thisMonthStats->count,
-                'thisMonthTotal'    => (float) $thisMonthStats->total,
+                'thisMonthCount' => (int) $thisMonthStats->count,
+                'thisMonthTotal' => (float) $thisMonthStats->total,
                 'thisMonthAccepted' => (float) $thisMonthAccepted,
-                'sentCount'         => (int) ($statusCounts['sent'] ?? 0),
-                'acceptedCount'     => (int) ($statusCounts['accepted'] ?? 0),
-                'draftCount'        => (int) ($statusCounts['draft'] ?? 0),
-                'totalCount'        => array_sum($statusCounts),
+                'sentCount' => (int) ($statusCounts['sent'] ?? 0),
+                'acceptedCount' => (int) ($statusCounts['accepted'] ?? 0),
+                'draftCount' => (int) ($statusCounts['draft'] ?? 0),
+                'totalCount' => array_sum($statusCounts),
             ],
             'recentQuotes' => $recentQuotes,
-            'statuses'     => Quote::STATUSES,
+            'statuses' => Quote::STATUSES,
         ]);
     }
 }

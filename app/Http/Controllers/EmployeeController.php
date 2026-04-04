@@ -97,7 +97,7 @@ class EmployeeController extends Controller
             direction: $request->string('direction', 'asc')->toString(),
         );
 
-        $filename = '社員マスタ_' . now()->format('YmdHis') . '.xlsx';
+        $filename = '社員マスタ_'.now()->format('YmdHis').'.xlsx';
 
         return Excel::download($export, $filename);
     }

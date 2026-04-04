@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Head } from '@inertiajs/vue3';
 import DeptController from '@/actions/App/Http/Controllers/DeptController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import DeptForm from '@/components/DeptForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Parent {
@@ -30,7 +30,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
     name: props.dept.name,
-    parent_id: props.dept.parent_id ? String(props.dept.parent_id) : (null as string | null),
+    parent_id: props.dept.parent_id
+        ? String(props.dept.parent_id)
+        : (null as string | null),
 });
 
 function submit() {

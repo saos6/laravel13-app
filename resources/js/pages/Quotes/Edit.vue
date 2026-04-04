@@ -2,16 +2,26 @@
 import { Head } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
 import QuoteController from '@/actions/App/Http/Controllers/QuoteController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import QuoteForm from '@/components/QuoteForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
-interface Customer { id: number; name: string; }
-interface Employee { id: number; name: string; }
+interface Customer {
+    id: number;
+    name: string;
+}
+interface Employee {
+    id: number;
+    name: string;
+}
 interface ProductOption {
-    id: number; code: string; name: string;
-    spec: string | null; unit: string | null;
-    price: string | null; tax_rate: string | null;
+    id: number;
+    code: string;
+    name: string;
+    spec: string | null;
+    unit: string | null;
+    price: string | null;
+    tax_rate: string | null;
 }
 interface QuoteItem {
     product_id: number | null;
@@ -49,28 +59,31 @@ const props = defineProps<{
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: '見積', href: QuoteController.index.url() },
-    { title: props.quote.quote_number, href: QuoteController.show.url(props.quote.id) },
+    {
+        title: props.quote.quote_number,
+        href: QuoteController.show.url(props.quote.id),
+    },
     { title: '編集', href: QuoteController.edit.url(props.quote.id) },
 ];
 
 const form = useForm({
-    customer_id:  String(props.quote.customer_id),
-    employee_id:  props.quote.employee_id ? String(props.quote.employee_id) : '',
-    quote_date:   props.quote.quote_date,
-    expiry_date:  props.quote.expiry_date ?? '',
-    subject:      props.quote.subject,
-    status:       props.quote.status,
-    remarks:      props.quote.remarks ?? '',
+    customer_id: String(props.quote.customer_id),
+    employee_id: props.quote.employee_id ? String(props.quote.employee_id) : '',
+    quote_date: props.quote.quote_date,
+    expiry_date: props.quote.expiry_date ?? '',
+    subject: props.quote.subject,
+    status: props.quote.status,
+    remarks: props.quote.remarks ?? '',
     items: props.quote.items.map((item) => ({
-        product_id:   item.product_id,
+        product_id: item.product_id,
         product_name: item.product_name,
-        spec:         item.spec ?? '',
-        quantity:     item.quantity,
-        unit:         item.unit ?? '',
-        unit_price:   item.unit_price,
-        tax_rate:     item.tax_rate,
-        amount:       parseFloat(item.amount) || 0,
-        remarks:      item.remarks ?? '',
+        spec: item.spec ?? '',
+        quantity: item.quantity,
+        unit: item.unit ?? '',
+        unit_price: item.unit_price,
+        tax_rate: item.tax_rate,
+        amount: parseFloat(item.amount) || 0,
+        remarks: item.remarks ?? '',
     })),
 });
 
@@ -83,7 +96,12 @@ function submit() {
     <AppLayout :breadcrumbs="breadcrumbs">
         <Head :title="`見積 ${quote.quote_number} 編集`" />
         <div class="p-4">
-            <h1 class="mb-6 text-2xl font-bold">見積 編集 <span class="font-mono text-muted-foreground">{{ quote.quote_number }}</span></h1>
+            <h1 class="mb-6 text-2xl font-bold">
+                見積 編集
+                <span class="font-mono text-muted-foreground">{{
+                    quote.quote_number
+                }}</span>
+            </h1>
             <QuoteForm
                 :form="form"
                 :customers="customers"

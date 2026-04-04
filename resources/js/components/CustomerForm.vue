@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import InputError from '@/components/InputError.vue';
 
 interface Employee {
     id: number;
@@ -54,10 +60,13 @@ interface Props {
     processingLabel: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 const emit = defineEmits<{ submit: [] }>();
 
-const dayOptions = Array.from({ length: 30 }, (_, i) => ({ value: String(i + 1), label: `${i + 1}日` }));
+const dayOptions = Array.from({ length: 30 }, (_, i) => ({
+    value: String(i + 1),
+    label: `${i + 1}日`,
+}));
 dayOptions.push({ value: '31', label: '末日' });
 </script>
 
@@ -86,14 +95,25 @@ dayOptions.push({ value: '31', label: '末日' });
                 <Label for="employee_id">担当社員</Label>
                 <Select
                     :model-value="form.employee_id ?? '__none__'"
-                    @update:model-value="(v) => (form.employee_id = v === '__none__' ? null : v)"
+                    @update:model-value="
+                        (v) => (form.employee_id = v === '__none__' ? null : v)
+                    "
                 >
-                    <SelectTrigger id="employee_id" :class="{ 'border-destructive': form.errors.employee_id }">
+                    <SelectTrigger
+                        id="employee_id"
+                        :class="{
+                            'border-destructive': form.errors.employee_id,
+                        }"
+                    >
                         <SelectValue placeholder="（なし）" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="__none__">（なし）</SelectItem>
-                        <SelectItem v-for="emp in employees" :key="emp.id" :value="String(emp.id)">
+                        <SelectItem
+                            v-for="emp in employees"
+                            :key="emp.id"
+                            :value="String(emp.id)"
+                        >
                             [{{ emp.code }}] {{ emp.name }}
                         </SelectItem>
                     </SelectContent>
@@ -202,14 +222,25 @@ dayOptions.push({ value: '31', label: '末日' });
                 <Label for="closing_day">締め日</Label>
                 <Select
                     :model-value="form.closing_day ?? '__none__'"
-                    @update:model-value="(v) => (form.closing_day = v === '__none__' ? null : v)"
+                    @update:model-value="
+                        (v) => (form.closing_day = v === '__none__' ? null : v)
+                    "
                 >
-                    <SelectTrigger id="closing_day" :class="{ 'border-destructive': form.errors.closing_day }">
+                    <SelectTrigger
+                        id="closing_day"
+                        :class="{
+                            'border-destructive': form.errors.closing_day,
+                        }"
+                    >
                         <SelectValue placeholder="（なし）" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="__none__">（なし）</SelectItem>
-                        <SelectItem v-for="opt in dayOptions" :key="opt.value" :value="opt.value">
+                        <SelectItem
+                            v-for="opt in dayOptions"
+                            :key="opt.value"
+                            :value="opt.value"
+                        >
                             {{ opt.label }}
                         </SelectItem>
                     </SelectContent>
@@ -222,14 +253,26 @@ dayOptions.push({ value: '31', label: '末日' });
                 <Label for="payment_cycle">支払いサイクル</Label>
                 <Select
                     :model-value="form.payment_cycle ?? '__none__'"
-                    @update:model-value="(v) => (form.payment_cycle = v === '__none__' ? null : v)"
+                    @update:model-value="
+                        (v) =>
+                            (form.payment_cycle = v === '__none__' ? null : v)
+                    "
                 >
-                    <SelectTrigger id="payment_cycle" :class="{ 'border-destructive': form.errors.payment_cycle }">
+                    <SelectTrigger
+                        id="payment_cycle"
+                        :class="{
+                            'border-destructive': form.errors.payment_cycle,
+                        }"
+                    >
                         <SelectValue placeholder="（なし）" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="__none__">（なし）</SelectItem>
-                        <SelectItem v-for="(label, value) in paymentCycles" :key="value" :value="value">
+                        <SelectItem
+                            v-for="(label, value) in paymentCycles"
+                            :key="value"
+                            :value="value"
+                        >
                             {{ label }}
                         </SelectItem>
                     </SelectContent>
@@ -242,14 +285,25 @@ dayOptions.push({ value: '31', label: '末日' });
                 <Label for="payment_day">支払日</Label>
                 <Select
                     :model-value="form.payment_day ?? '__none__'"
-                    @update:model-value="(v) => (form.payment_day = v === '__none__' ? null : v)"
+                    @update:model-value="
+                        (v) => (form.payment_day = v === '__none__' ? null : v)
+                    "
                 >
-                    <SelectTrigger id="payment_day" :class="{ 'border-destructive': form.errors.payment_day }">
+                    <SelectTrigger
+                        id="payment_day"
+                        :class="{
+                            'border-destructive': form.errors.payment_day,
+                        }"
+                    >
                         <SelectValue placeholder="（なし）" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="__none__">（なし）</SelectItem>
-                        <SelectItem v-for="opt in dayOptions" :key="opt.value" :value="opt.value">
+                        <SelectItem
+                            v-for="opt in dayOptions"
+                            :key="opt.value"
+                            :value="opt.value"
+                        >
                             {{ opt.label }}
                         </SelectItem>
                     </SelectContent>

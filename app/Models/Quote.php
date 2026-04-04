@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Quote extends Model
 {
     public const STATUSES = [
-        'draft'    => '下書き',
-        'sent'     => '送付済み',
+        'draft' => '下書き',
+        'sent' => '送付済み',
         'accepted' => '受注',
         'rejected' => '失注',
-        'expired'  => '期限切れ',
+        'expired' => '期限切れ',
     ];
 
     protected $fillable = [
@@ -32,10 +32,10 @@ class Quote extends Model
     ];
 
     protected $casts = [
-        'quote_date'   => 'date',
-        'expiry_date'  => 'date',
-        'subtotal'     => 'decimal:2',
-        'tax_amount'   => 'decimal:2',
+        'quote_date' => 'date',
+        'expiry_date' => 'date',
+        'subtotal' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
         'total_amount' => 'decimal:2',
     ];
 
@@ -80,15 +80,15 @@ class Quote extends Model
 
     public static function generateQuoteNumber(): string
     {
-        $prefix = 'QU-' . now()->format('Ym') . '-';
+        $prefix = 'QU-'.now()->format('Ym').'-';
         $last = self::withoutGlobalScopes()
-            ->where('quote_number', 'like', $prefix . '%')
+            ->where('quote_number', 'like', $prefix.'%')
             ->orderByDesc('quote_number')
             ->value('quote_number');
 
         $seq = $last ? ((int) substr($last, -4)) + 1 : 1;
 
-        return $prefix . str_pad($seq, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($seq, 4, '0', STR_PAD_LEFT);
     }
 
     public function getStatusLabelAttribute(): string

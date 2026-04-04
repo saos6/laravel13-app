@@ -15,30 +15,30 @@ class Product extends Model
 
     protected $casts = [
         'is_deleted' => 'boolean',
-        'has_stock'  => 'boolean',
-        'price'      => 'decimal:2',
-        'cost'       => 'decimal:2',
+        'has_stock' => 'boolean',
+        'price' => 'decimal:2',
+        'cost' => 'decimal:2',
     ];
 
     public const CATEGORIES = [
         'electronics' => '電子機器',
-        'food'        => '食品・飲料',
-        'clothing'    => '衣類・アパレル',
-        'furniture'   => '家具・インテリア',
-        'stationery'  => '文具・事務用品',
-        'tools'       => '工具・機械',
-        'materials'   => '化学・素材',
-        'other'       => 'その他',
+        'food' => '食品・飲料',
+        'clothing' => '衣類・アパレル',
+        'furniture' => '家具・インテリア',
+        'stationery' => '文具・事務用品',
+        'tools' => '工具・機械',
+        'materials' => '化学・素材',
+        'other' => 'その他',
     ];
 
     public const TAX_RATES = [
-        '0'  => '0%',
-        '8'  => '8%（軽減）',
+        '0' => '0%',
+        '8' => '8%（軽減）',
         '10' => '10%',
     ];
 
     public const STATUSES = [
-        'active'       => '有効',
+        'active' => '有効',
         'discontinued' => '廃盤',
     ];
 

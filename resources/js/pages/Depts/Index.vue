@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
 import { router, Head, Link } from '@inertiajs/vue3';
+import {
+    ArrowUpDown,
+    ArrowUp,
+    ArrowDown,
+    Download,
+    Plus,
+    Pencil,
+    Trash2,
+    Columns3,
+    Search,
+} from 'lucide-vue-next';
+import { ref, computed, watch } from 'vue';
 import DeptController from '@/actions/App/Http/Controllers/DeptController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -14,7 +22,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ArrowUpDown, ArrowUp, ArrowDown, Download, Plus, Pencil, Trash2, Columns3, Search } from 'lucide-vue-next';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
 interface Dept {
@@ -77,14 +93,20 @@ const defaultColumns: Record<ColumnKey, { label: string; visible: boolean }> = {
 function loadColumns(): Record<ColumnKey, { label: string; visible: boolean }> {
     try {
         const saved = localStorage.getItem(COLUMNS_STORAGE_KEY);
-        if (!saved) return defaultColumns;
+
+        if (!saved) {
+            return defaultColumns;
+        }
+
         const parsed = JSON.parse(saved) as Partial<Record<ColumnKey, boolean>>;
+
         return (Object.keys(defaultColumns) as ColumnKey[]).reduce(
             (acc, key) => {
                 acc[key] = {
                     ...defaultColumns[key],
                     visible: parsed[key] ?? defaultColumns[key].visible,
                 };
+
                 return acc;
             },
             {} as Record<ColumnKey, { label: string; visible: boolean }>,
@@ -102,6 +124,7 @@ watch(
         const visibility = (Object.keys(val) as ColumnKey[]).reduce(
             (acc, key) => {
                 acc[key] = val[key].visible;
+
                 return acc;
             },
             {} as Partial<Record<ColumnKey, boolean>>,
@@ -112,7 +135,9 @@ watch(
 );
 
 const visibleColumns = computed(() =>
-    (Object.keys(columns.value) as ColumnKey[]).filter((k) => columns.value[k].visible),
+    (Object.keys(columns.value) as ColumnKey[]).filter(
+        (k) => columns.value[k].visible,
+    ),
 );
 
 function applyFilters() {
@@ -139,6 +164,7 @@ function toggleSort(field: string) {
         sortField.value = field;
         sortDir.value = 'asc';
     }
+
     applyFilters();
 }
 
@@ -163,7 +189,10 @@ function deleteDept(id: number, name: string) {
 }
 
 function sortIcon(field: string) {
-    if (sortField.value !== field) return 'none';
+    if (sortField.value !== field) {
+        return 'none';
+    }
+
     return sortDir.value === 'asc' ? 'asc' : 'desc';
 }
 
@@ -196,7 +225,10 @@ function paginationLabel(label: string): string {
                                 v-for="(col, key) in columns"
                                 :key="key"
                                 :checked="col.visible"
-                                @update:checked="(v) => (columns[key as ColumnKey].visible = v)"
+                                @update:checked="
+                                    (v) =>
+                                        (columns[key as ColumnKey].visible = v)
+                                "
                             >
                                 {{ col.label }}
                             </DropdownMenuCheckboxItem>
@@ -222,7 +254,9 @@ function paginationLabel(label: string): string {
             <!-- 検索バー -->
             <div class="flex items-center gap-2">
                 <div class="relative max-w-sm flex-1">
-                    <Search class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search
+                        class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                    />
                     <Input
                         v-model="search"
                         placeholder="所属名で検索..."
@@ -230,7 +264,9 @@ function paginationLabel(label: string): string {
                         @keyup.enter="handleSearch"
                     />
                 </div>
-                <Button variant="secondary" size="sm" @click="handleSearch">検索</Button>
+                <Button variant="secondary" size="sm" @click="handleSearch"
+                    >検索</Button
+                >
                 <Button
                     variant="ghost"
                     size="sm"
@@ -246,16 +282,23 @@ function paginationLabel(label: string): string {
             </div>
 
             <!-- 件数・ページあたり表示数 -->
-            <div class="flex items-center justify-between text-sm text-muted-foreground">
+            <div
+                class="flex items-center justify-between text-sm text-muted-foreground"
+            >
                 <span>
-                    全 <strong class="text-foreground">{{ depts.total }}</strong> 件
+                    全
+                    <strong class="text-foreground">{{ depts.total }}</strong>
+                    件
                     <template v-if="depts.from && depts.to">
                         （{{ depts.from }}〜{{ depts.to }} 件表示）
                     </template>
                 </span>
                 <div class="flex items-center gap-2">
                     <span>表示件数：</span>
-                    <Select :model-value="perPage" @update:model-value="handlePerPageChange">
+                    <Select
+                        :model-value="perPage"
+                        @update:model-value="handlePerPageChange"
+                    >
                         <SelectTrigger class="h-8 w-24">
                             <SelectValue />
                         </SelectTrigger>
@@ -276,65 +319,120 @@ function paginationLabel(label: string): string {
                         <tr>
                             <th
                                 v-if="columns.id.visible"
-                                class="cursor-pointer select-none px-4 py-3 text-left font-medium whitespace-nowrap"
+                                class="cursor-pointer px-4 py-3 text-left font-medium whitespace-nowrap select-none"
                                 @click="toggleSort('id')"
                             >
                                 <span class="flex items-center gap-1">
                                     ID
-                                    <ArrowUp v-if="sortIcon('id') === 'asc'" class="h-3.5 w-3.5" />
-                                    <ArrowDown v-else-if="sortIcon('id') === 'desc'" class="h-3.5 w-3.5" />
-                                    <ArrowUpDown v-else class="h-3.5 w-3.5 opacity-40" />
+                                    <ArrowUp
+                                        v-if="sortIcon('id') === 'asc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowDown
+                                        v-else-if="sortIcon('id') === 'desc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowUpDown
+                                        v-else
+                                        class="h-3.5 w-3.5 opacity-40"
+                                    />
                                 </span>
                             </th>
                             <th
                                 v-if="columns.name.visible"
-                                class="cursor-pointer select-none px-4 py-3 text-left font-medium whitespace-nowrap"
+                                class="cursor-pointer px-4 py-3 text-left font-medium whitespace-nowrap select-none"
                                 @click="toggleSort('name')"
                             >
                                 <span class="flex items-center gap-1">
                                     所属名
-                                    <ArrowUp v-if="sortIcon('name') === 'asc'" class="h-3.5 w-3.5" />
-                                    <ArrowDown v-else-if="sortIcon('name') === 'desc'" class="h-3.5 w-3.5" />
-                                    <ArrowUpDown v-else class="h-3.5 w-3.5 opacity-40" />
+                                    <ArrowUp
+                                        v-if="sortIcon('name') === 'asc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowDown
+                                        v-else-if="sortIcon('name') === 'desc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowUpDown
+                                        v-else
+                                        class="h-3.5 w-3.5 opacity-40"
+                                    />
                                 </span>
                             </th>
                             <th
                                 v-if="columns.parent.visible"
-                                class="cursor-pointer select-none px-4 py-3 text-left font-medium whitespace-nowrap"
+                                class="cursor-pointer px-4 py-3 text-left font-medium whitespace-nowrap select-none"
                                 @click="toggleSort('parent_id')"
                             >
                                 <span class="flex items-center gap-1">
                                     親所属
-                                    <ArrowUp v-if="sortIcon('parent_id') === 'asc'" class="h-3.5 w-3.5" />
-                                    <ArrowDown v-else-if="sortIcon('parent_id') === 'desc'" class="h-3.5 w-3.5" />
-                                    <ArrowUpDown v-else class="h-3.5 w-3.5 opacity-40" />
+                                    <ArrowUp
+                                        v-if="sortIcon('parent_id') === 'asc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowDown
+                                        v-else-if="
+                                            sortIcon('parent_id') === 'desc'
+                                        "
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowUpDown
+                                        v-else
+                                        class="h-3.5 w-3.5 opacity-40"
+                                    />
                                 </span>
                             </th>
                             <th
                                 v-if="columns.created_at.visible"
-                                class="cursor-pointer select-none px-4 py-3 text-left font-medium whitespace-nowrap"
+                                class="cursor-pointer px-4 py-3 text-left font-medium whitespace-nowrap select-none"
                                 @click="toggleSort('created_at')"
                             >
                                 <span class="flex items-center gap-1">
                                     作成日時
-                                    <ArrowUp v-if="sortIcon('created_at') === 'asc'" class="h-3.5 w-3.5" />
-                                    <ArrowDown v-else-if="sortIcon('created_at') === 'desc'" class="h-3.5 w-3.5" />
-                                    <ArrowUpDown v-else class="h-3.5 w-3.5 opacity-40" />
+                                    <ArrowUp
+                                        v-if="sortIcon('created_at') === 'asc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowDown
+                                        v-else-if="
+                                            sortIcon('created_at') === 'desc'
+                                        "
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowUpDown
+                                        v-else
+                                        class="h-3.5 w-3.5 opacity-40"
+                                    />
                                 </span>
                             </th>
                             <th
                                 v-if="columns.updated_at.visible"
-                                class="cursor-pointer select-none px-4 py-3 text-left font-medium whitespace-nowrap"
+                                class="cursor-pointer px-4 py-3 text-left font-medium whitespace-nowrap select-none"
                                 @click="toggleSort('updated_at')"
                             >
                                 <span class="flex items-center gap-1">
                                     更新日時
-                                    <ArrowUp v-if="sortIcon('updated_at') === 'asc'" class="h-3.5 w-3.5" />
-                                    <ArrowDown v-else-if="sortIcon('updated_at') === 'desc'" class="h-3.5 w-3.5" />
-                                    <ArrowUpDown v-else class="h-3.5 w-3.5 opacity-40" />
+                                    <ArrowUp
+                                        v-if="sortIcon('updated_at') === 'asc'"
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowDown
+                                        v-else-if="
+                                            sortIcon('updated_at') === 'desc'
+                                        "
+                                        class="h-3.5 w-3.5"
+                                    />
+                                    <ArrowUpDown
+                                        v-else
+                                        class="h-3.5 w-3.5 opacity-40"
+                                    />
                                 </span>
                             </th>
-                            <th class="px-4 py-3 text-left font-medium whitespace-nowrap">操作</th>
+                            <th
+                                class="px-4 py-3 text-left font-medium whitespace-nowrap"
+                            >
+                                操作
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -343,25 +441,61 @@ function paginationLabel(label: string): string {
                             :key="dept.id"
                             class="border-t transition-colors hover:bg-muted/30"
                         >
-                            <td v-if="columns.id.visible" class="px-4 py-3 text-muted-foreground">
+                            <td
+                                v-if="columns.id.visible"
+                                class="px-4 py-3 text-muted-foreground"
+                            >
                                 {{ dept.id }}
                             </td>
-                            <td v-if="columns.name.visible" class="px-4 py-3 font-medium">
+                            <td
+                                v-if="columns.name.visible"
+                                class="px-4 py-3 font-medium"
+                            >
                                 {{ dept.name }}
                             </td>
-                            <td v-if="columns.parent.visible" class="px-4 py-3 text-muted-foreground">
+                            <td
+                                v-if="columns.parent.visible"
+                                class="px-4 py-3 text-muted-foreground"
+                            >
                                 {{ dept.parent?.name ?? '—' }}
                             </td>
-                            <td v-if="columns.created_at.visible" class="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                                {{ dept.created_at ? new Date(dept.created_at).toLocaleString('ja-JP') : '—' }}
+                            <td
+                                v-if="columns.created_at.visible"
+                                class="px-4 py-3 whitespace-nowrap text-muted-foreground"
+                            >
+                                {{
+                                    dept.created_at
+                                        ? new Date(
+                                              dept.created_at,
+                                          ).toLocaleString('ja-JP')
+                                        : '—'
+                                }}
                             </td>
-                            <td v-if="columns.updated_at.visible" class="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                                {{ dept.updated_at ? new Date(dept.updated_at).toLocaleString('ja-JP') : '—' }}
+                            <td
+                                v-if="columns.updated_at.visible"
+                                class="px-4 py-3 whitespace-nowrap text-muted-foreground"
+                            >
+                                {{
+                                    dept.updated_at
+                                        ? new Date(
+                                              dept.updated_at,
+                                          ).toLocaleString('ja-JP')
+                                        : '—'
+                                }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex gap-1">
-                                    <Button variant="ghost" size="icon" class="h-8 w-8" as-child>
-                                        <Link :href="DeptController.edit.url(dept.id)">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="h-8 w-8"
+                                        as-child
+                                    >
+                                        <Link
+                                            :href="
+                                                DeptController.edit.url(dept.id)
+                                            "
+                                        >
                                             <Pencil class="h-4 w-4" />
                                         </Link>
                                     </Button>
@@ -389,13 +523,19 @@ function paginationLabel(label: string): string {
             </div>
 
             <!-- ページング -->
-            <div v-if="depts.last_page > 1" class="flex items-center justify-center gap-1">
+            <div
+                v-if="depts.last_page > 1"
+                class="flex items-center justify-center gap-1"
+            >
                 <template v-for="link in depts.links" :key="link.label">
                     <Button
                         v-if="link.url"
                         variant="outline"
                         size="sm"
-                        :class="{ 'bg-primary text-primary-foreground hover:bg-primary/90': link.active }"
+                        :class="{
+                            'bg-primary text-primary-foreground hover:bg-primary/90':
+                                link.active,
+                        }"
                         @click="router.visit(link.url)"
                     >
                         {{ paginationLabel(link.label) }}

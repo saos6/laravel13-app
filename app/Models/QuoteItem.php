@@ -22,9 +22,9 @@ class QuoteItem extends Model
     ];
 
     protected $casts = [
-        'quantity'   => 'decimal:2',
+        'quantity' => 'decimal:2',
         'unit_price' => 'decimal:2',
-        'amount'     => 'decimal:2',
+        'amount' => 'decimal:2',
     ];
 
     public function quote(): BelongsTo

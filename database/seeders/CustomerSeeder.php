@@ -62,19 +62,19 @@ class CustomerSeeder extends Seeder
 
         foreach ($customers as $data) {
             Customer::create([
-                'code'          => $data['code'],
-                'name'          => $data['name'],
-                'name_kana'     => $data['name_kana'],
-                'postal_code'   => $data['postal_code'],
-                'address'       => $data['address'],
-                'phone'         => $data['phone'],
-                'fax'           => $data['fax'],
-                'email'         => $data['email'],
-                'employee_id'   => $employees->get($data['employee_code'])?->id,
-                'closing_day'   => $data['closing_day'],
+                'code' => $data['code'],
+                'name' => $data['name'],
+                'name_kana' => $data['name_kana'],
+                'postal_code' => $data['postal_code'],
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'fax' => $data['fax'],
+                'email' => $data['email'],
+                'employee_id' => $employees->get($data['employee_code'])?->id,
+                'closing_day' => $data['closing_day'],
                 'payment_cycle' => $data['payment_cycle'],
-                'payment_day'   => $data['payment_day'],
-                'remarks'       => $data['remarks'],
+                'payment_day' => $data['payment_day'],
+                'remarks' => $data['remarks'],
             ]);
         }
     }

@@ -2,16 +2,26 @@
 import { Head } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
 import QuoteController from '@/actions/App/Http/Controllers/QuoteController';
-import AppLayout from '@/layouts/AppLayout.vue';
 import QuoteForm from '@/components/QuoteForm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
-interface Customer { id: number; name: string; }
-interface Employee { id: number; name: string; }
+interface Customer {
+    id: number;
+    name: string;
+}
+interface Employee {
+    id: number;
+    name: string;
+}
 interface ProductOption {
-    id: number; code: string; name: string;
-    spec: string | null; unit: string | null;
-    price: string | null; tax_rate: string | null;
+    id: number;
+    code: string;
+    name: string;
+    spec: string | null;
+    unit: string | null;
+    price: string | null;
+    tax_rate: string | null;
 }
 
 defineProps<{
@@ -31,13 +41,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 const today = new Date().toISOString().slice(0, 10);
 
 const form = useForm({
-    customer_id:  '',
-    employee_id:  '',
-    quote_date:   today,
-    expiry_date:  '',
-    subject:      '',
-    status:       'draft',
-    remarks:      '',
+    customer_id: '',
+    employee_id: '',
+    quote_date: today,
+    expiry_date: '',
+    subject: '',
+    status: 'draft',
+    remarks: '',
     items: [
         {
             product_id: null as number | null,
