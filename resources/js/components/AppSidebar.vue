@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Building2, FolderGit2, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, Building2, FolderGit2, LayoutGrid, Users } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import DeptController from '@/actions/App/Http/Controllers/DeptController';
+import EmployeeController from '@/actions/App/Http/Controllers/EmployeeController';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -28,6 +29,11 @@ const mainNavItems: NavItem[] = [
         title: '所属マスタ',
         href: DeptController.index.url(),
         icon: Building2,
+    },
+    {
+        title: '社員マスタ',
+        href: EmployeeController.index.url(),
+        icon: Users,
     },
 ];
 

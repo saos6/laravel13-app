@@ -23,11 +23,19 @@ class DeptsExport implements FromCollection, WithHeadings, WithMapping, WithStyl
         $sortField = in_array($this->sort, $allowedSorts) ? $this->sort : 'id';
         $sortDir = $this->direction === 'desc' ? 'desc' : 'asc';
 
-        return Dept::with('parent')
+        $query = Dept::with('parent')
             ->active()
-            ->when($this->search !== '', fn ($q) => $q->where('name', 'like', "%{$this->search}%"))
-            ->orderBy($sortField, $sortDir)
-            ->get();
+            ->filtered($this->search);
+
+        if ($sortField === 'parent_id') {
+            $query->leftJoin('depts as parents', 'depts.parent_id', '=', 'parents.id')
+                ->orderBy('parents.name', $sortDir)
+                ->select('depts.*');
+        } else {
+            $query->orderBy($sortField, $sortDir);
+        }
+
+        return $query->get();
     }
 
     public function headings(): array

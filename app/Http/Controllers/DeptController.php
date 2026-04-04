@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DeptsExport;
+use App\Http\Requests\DeptRequest;
 use App\Models\Dept;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class DeptController extends Controller
 
         $query = Dept::with('parent')
             ->active()
-            ->when($search !== '', fn ($q) => $q->where('name', 'like', "%{$search}%"));
+            ->filtered($search);
 
         if ($sort === 'parent_id') {
             $query->leftJoin('depts as parents', 'depts.parent_id', '=', 'parents.id')
@@ -35,11 +36,8 @@ class DeptController extends Controller
 
         $depts = $query->paginate($perPage)->withQueryString();
 
-        $parents = Dept::active()->orderBy('name')->get(['id', 'name']);
-
         return Inertia::render('Depts/Index', [
             'depts' => $depts,
-            'parents' => $parents,
             'filters' => [
                 'search' => $search,
                 'sort' => $sort,
@@ -58,14 +56,9 @@ class DeptController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(DeptRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'parent_id' => 'nullable|exists:depts,id',
-        ]);
-
-        Dept::create($validated);
+        Dept::create($request->validated());
 
         return redirect()->route('depts.index')->with('success', '所属を登録しました。');
     }
@@ -83,21 +76,21 @@ class DeptController extends Controller
         ]);
     }
 
-    public function update(Request $request, Dept $dept): RedirectResponse
+    public function update(DeptRequest $request, Dept $dept): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'parent_id' => 'nullable|exists:depts,id',
-        ]);
-
-        $dept->update($validated);
+        $dept->update($request->validated());
 
         return redirect()->route('depts.index')->with('success', '所属を更新しました。');
     }
 
     public function destroy(Dept $dept): RedirectResponse
     {
-        $dept->update(['is_deleted' => true]);
+        if ($dept->children()->active()->exists()) {
+            return redirect()->back()->with('error', 'この所属には子所属が存在するため削除できません。');
+        }
+
+        $dept->is_deleted = true;
+        $dept->save();
 
         return redirect()->route('depts.index')->with('success', '所属を削除しました。');
     }
