@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Product;
 use App\Models\Quote;
 use App\Models\QuoteItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -144,6 +145,25 @@ class QuoteController extends Controller
         $quote->save();
 
         return redirect()->route('quotes.index')->with('success', '見積を削除しました。');
+    }
+
+    public function pdf(Quote $quote)
+    {
+        abort_if($quote->is_deleted, 404);
+        $quote->load(['customer', 'employee', 'items']);
+
+        // 税率別の消費税額を集計
+        $taxBreakdown = $quote->items
+            ->groupBy('tax_rate')
+            ->map(fn ($items) => $items->sum(fn ($i) => round((float) $i->amount * (int) $i->tax_rate / 100, 0)))
+            ->sortKeys();
+
+        $pdf = Pdf::loadView('pdf.quote', compact('quote', 'taxBreakdown'))
+            ->setPaper('a4', 'portrait');
+
+        $filename = '見積書_'.$quote->quote_number.'.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function exportMethod(Request $request)

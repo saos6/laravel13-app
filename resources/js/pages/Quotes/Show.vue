@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { Copy, Pencil } from 'lucide-vue-next';
+import { Copy, FileDown, Pencil } from 'lucide-vue-next';
 import QuoteController from '@/actions/App/Http/Controllers/QuoteController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -96,6 +96,14 @@ function fmtDate(val: string | null): string {
                         <Link :href="QuoteController.index.url()"
                             >一覧へ戻る</Link
                         >
+                    </Button>
+                    <Button variant="outline" size="sm" as-child>
+                        <a
+                            :href="QuoteController.pdf.url(quote.id)"
+                            target="_blank"
+                        >
+                            <FileDown class="mr-1 h-4 w-4" />PDF出力
+                        </a>
                     </Button>
                     <Button variant="outline" size="sm" as-child>
                         <Link :href="QuoteController.replicate.url(quote.id)">
