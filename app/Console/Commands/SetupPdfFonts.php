@@ -48,20 +48,54 @@ class SetupPdfFonts extends Command
 
         $fileUri = 'file://'.str_replace('\\', '/', $ttfPath);
 
+        // Step 2a: normal を1回登録して .ttf/.ufm キャッシュを生成 & ハッシュを取得
         $ok = $fontMetrics->registerFont(
             ['family' => 'IPAexGothic', 'weight' => 'normal', 'style' => 'normal'],
             $fileUri
         );
-
         if (! $ok) {
-            $this->error('Font registration failed. Check that storage/fonts/ is writable.');
+            $this->error('Font registration failed.');
 
             return self::FAILURE;
         }
-
         $fontMetrics->saveFontFamilies();
 
-        $this->info('  Font registered successfully.');
+        // JSON から normal の相対ファイル名を取得してハッシュを抽出
+        $jsonPath   = $fontDir.DIRECTORY_SEPARATOR.'installed-fonts.json';
+        $jsonData   = json_decode(file_get_contents($jsonPath), true);
+        $normalName = $jsonData['ipaexgothic']['normal'] ?? null;  // e.g. "ipaexgothic_normal_abc123"
+        if (! $normalName || ! str_starts_with($normalName, 'ipaexgothic_')) {
+            $this->error('Could not read registered font name from installed-fonts.json');
+
+            return self::FAILURE;
+        }
+        // "ipaexgothic_normal_<hash>" → "<hash>"
+        $hash = substr($normalName, strlen('ipaexgothic_normal_'));
+        $this->line("  Normal registered. Hash: {$hash}");
+
+        // Step 2b: bold/italic/bold_italic 用のキャッシュファイルを normal からコピー
+        $variantKeys = ['bold', 'italic', 'bold_italic'];
+        foreach ($variantKeys as $key) {
+            $baseName = "ipaexgothic_{$key}_{$hash}";
+            foreach (['.ttf', '.ufm'] as $ext) {
+                $src  = $fontDir.DIRECTORY_SEPARATOR."ipaexgothic_normal_{$hash}{$ext}";
+                $dest = $fontDir.DIRECTORY_SEPARATOR.$baseName.$ext;
+                if (! file_exists($dest)) {
+                    copy($src, $dest);
+                }
+            }
+            $this->line("  Copied cache: {$baseName}");
+        }
+
+        // Step 2c: installed-fonts.json を全バリアント・相対パスで上書き
+        $jsonData['ipaexgothic'] = [
+            'normal'      => "ipaexgothic_normal_{$hash}",
+            'bold'        => "ipaexgothic_bold_{$hash}",
+            'italic'      => "ipaexgothic_italic_{$hash}",
+            'bold_italic' => "ipaexgothic_bold_italic_{$hash}",
+        ];
+        file_put_contents($jsonPath, json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->info('  installed-fonts.json updated with all 4 variants (relative paths).');
         $this->info('');
         $this->info('Done. PDF output will now render Japanese text correctly.');
 
