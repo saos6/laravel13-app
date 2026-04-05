@@ -28,8 +28,8 @@ interface ProductOption {
     name: string;
     spec: string | null;
     unit: string | null;
-    price: string | null;
-    tax_rate: string | null;
+    price: string;
+    tax_rate: string;
 }
 interface QuoteItem {
     product_id: number | null;

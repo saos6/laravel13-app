@@ -79,6 +79,10 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer): RedirectResponse
     {
+        if ($customer->quotes()->active()->exists()) {
+            return redirect()->back()->with('error', 'この得意先には見積が存在するため削除できません。');
+        }
+
         $customer->is_deleted = true;
         $customer->save();
 

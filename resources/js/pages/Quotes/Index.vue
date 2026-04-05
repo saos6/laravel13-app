@@ -12,8 +12,7 @@ import {
     Search,
     Eye,
 } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
-import { watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import QuoteController from '@/actions/App/Http/Controllers/QuoteController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

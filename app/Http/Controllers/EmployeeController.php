@@ -83,10 +83,16 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee): RedirectResponse
     {
+        $quoteCount = $employee->quotes()->active()->count();
+
         $employee->is_deleted = true;
         $employee->save();
 
-        return redirect()->route('employees.index')->with('success', '社員を削除しました。');
+        $message = $quoteCount > 0
+            ? "社員を削除しました。（紐づく見積 {$quoteCount} 件の担当者は未設定になります）"
+            : '社員を削除しました。';
+
+        return redirect()->route('employees.index')->with('success', $message);
     }
 
     public function export(Request $request): BinaryFileResponse

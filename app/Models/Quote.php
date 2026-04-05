@@ -90,9 +90,4 @@ class Quote extends Model
 
         return $prefix.str_pad($seq, 4, '0', STR_PAD_LEFT);
     }
-
-    public function getStatusLabelAttribute(): string
-    {
-        return self::STATUSES[$this->status] ?? $this->status;
-    }
 }
