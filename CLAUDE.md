@@ -29,11 +29,13 @@ php artisan test --filter=Dashboard    # Run single test by name
 php artisan test tests/Feature/DashboardTest.php  # Run single file
 ```
 
-### PDF fonts (run once per environment)
+### Initial setup (run once per environment)
 ```bash
-php artisan pdf:setup-fonts   # Downloads IPAex Gothic + registers with DomPDF
+php artisan migrate
+php artisan db:seed           # Optional: load sample data
+php artisan pdf:setup-fonts   # Download IPAex Gothic + register with DomPDF
 ```
-Font file lands in `storage/fonts/` (gitignored). Required for Japanese text in PDFs.
+`storage/fonts/` は `.gitignore` 対象のため、**git clone / git pull 後は必ず** `pdf:setup-fonts` を実行すること。実行しないと見積書 PDF の日本語が文字化けする。
 
 ### After adding a new controller
 Always run `npm run build` after creating or modifying controllers — **Laravel Wayfinder** auto-generates TypeScript action files under `resources/js/actions/` (e.g., `QuoteController.ts`). These are imported in Vue pages for type-safe URL generation.
