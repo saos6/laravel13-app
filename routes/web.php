@@ -18,10 +18,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 所属マスタ
     Route::get('depts/export', [DeptController::class, 'export'])->name('depts.export');
+    Route::get('depts/{dept}/replicate', [DeptController::class, 'replicate'])->name('depts.replicate');
     Route::resource('depts', DeptController::class)->except(['show']);
 
     // 社員マスタ
     Route::get('employees/export', [EmployeeController::class, 'export'])->name('employees.export');
+    Route::get('employees/{employee}/replicate', [EmployeeController::class, 'replicate'])->name('employees.replicate');
     Route::resource('employees', EmployeeController::class)->except(['show']);
 
     // 得意先マスタ

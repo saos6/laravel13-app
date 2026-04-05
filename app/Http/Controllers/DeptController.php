@@ -56,6 +56,20 @@ class DeptController extends Controller
         ]);
     }
 
+    public function replicate(Dept $dept): Response
+    {
+        abort_if($dept->is_deleted, 404);
+
+        $parents = Dept::active()->orderBy('name')->get(['id', 'name']);
+
+        return Inertia::render('Depts/Create', [
+            'parents' => $parents,
+            'prefill' => [
+                'parent_id' => $dept->parent_id ? (string) $dept->parent_id : null,
+            ],
+        ]);
+    }
+
     public function store(DeptRequest $request): RedirectResponse
     {
         Dept::create($request->validated());

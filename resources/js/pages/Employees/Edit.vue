@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { useForm, Head } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Copy } from 'lucide-vue-next';
 import EmployeeController from '@/actions/App/Http/Controllers/EmployeeController';
 import EmployeeForm from '@/components/EmployeeForm.vue';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
@@ -52,7 +54,18 @@ function submit() {
 
         <div class="max-w-2xl p-6">
             <div class="rounded-lg border bg-card p-6 shadow-sm">
-                <h1 class="mb-6 text-xl font-bold">社員 編集</h1>
+                <div class="mb-6 flex items-center justify-between">
+                    <h1 class="text-xl font-bold">社員 編集</h1>
+                    <Button variant="outline" size="sm" as-child>
+                        <Link
+                            :href="
+                                EmployeeController.replicate.url(employee.id)
+                            "
+                        >
+                            <Copy class="mr-1.5 h-4 w-4" />この社員を複製
+                        </Link>
+                    </Button>
+                </div>
                 <EmployeeForm
                     :form="form"
                     :depts="depts"

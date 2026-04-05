@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { useForm, Head } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Copy } from 'lucide-vue-next';
 import DeptController from '@/actions/App/Http/Controllers/DeptController';
 import DeptForm from '@/components/DeptForm.vue';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
@@ -46,7 +48,14 @@ function submit() {
 
         <div class="max-w-2xl p-6">
             <div class="rounded-lg border bg-card p-6 shadow-sm">
-                <h1 class="mb-6 text-xl font-bold">所属 編集</h1>
+                <div class="mb-6 flex items-center justify-between">
+                    <h1 class="text-xl font-bold">所属 編集</h1>
+                    <Button variant="outline" size="sm" as-child>
+                        <Link :href="DeptController.replicate.url(dept.id)">
+                            <Copy class="mr-1.5 h-4 w-4" />この所属を複製
+                        </Link>
+                    </Button>
+                </div>
                 <DeptForm
                     :form="form"
                     :parents="parents"

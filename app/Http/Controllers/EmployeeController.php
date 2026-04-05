@@ -57,6 +57,22 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function replicate(Employee $employee): Response
+    {
+        abort_if($employee->is_deleted, 404);
+
+        $depts = Dept::active()->orderBy('name')->get(['id', 'name']);
+
+        return Inertia::render('Employees/Create', [
+            'depts' => $depts,
+            'prefill' => [
+                'name' => $employee->name,
+                'name_kana' => $employee->name_kana ?? '',
+                'dept_id' => $employee->dept_id ? (string) $employee->dept_id : null,
+            ],
+        ]);
+    }
+
     public function store(EmployeeRequest $request): RedirectResponse
     {
         Employee::create($request->validated());
