@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { useForm, Head } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Copy } from 'lucide-vue-next';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import ProductForm from '@/components/ProductForm.vue';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 
@@ -63,7 +65,16 @@ function submit() {
         <Head :title="`商品マスタ 編集 - ${product.name}`" />
         <div class="max-w-4xl p-6">
             <div class="rounded-lg border bg-card p-6 shadow-sm">
-                <h1 class="mb-6 text-xl font-bold">商品 編集</h1>
+                <div class="mb-6 flex items-center justify-between">
+                    <h1 class="text-xl font-bold">商品 編集</h1>
+                    <Button variant="outline" size="sm" as-child>
+                        <Link
+                            :href="ProductController.replicate.url(product.id)"
+                        >
+                            <Copy class="mr-1.5 h-4 w-4" />この商品を複製
+                        </Link>
+                    </Button>
+                </div>
                 <ProductForm
                     :form="form"
                     :categories="categories"

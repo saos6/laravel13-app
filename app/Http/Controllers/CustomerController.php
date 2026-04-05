@@ -52,6 +52,25 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function replicate(Customer $customer): Response
+    {
+        abort_if($customer->is_deleted, 404);
+
+        $employees = Employee::active()->orderBy('code')->get(['id', 'code', 'name']);
+
+        $prefill = $customer->only([
+            'name', 'name_kana', 'postal_code', 'address',
+            'phone', 'fax', 'email', 'employee_id',
+            'closing_day', 'payment_cycle', 'payment_day', 'remarks',
+        ]);
+
+        return Inertia::render('Customers/Create', [
+            'employees' => $employees,
+            'paymentCycles' => Customer::PAYMENT_CYCLES,
+            'prefill' => $prefill,
+        ]);
+    }
+
     public function store(CustomerRequest $request): RedirectResponse
     {
         Customer::create($request->validated());

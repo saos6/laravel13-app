@@ -51,6 +51,24 @@ class ProductController extends Controller
         ]);
     }
 
+    public function replicate(Product $product): Response
+    {
+        abort_if($product->is_deleted, 404);
+
+        $prefill = $product->only([
+            'name', 'name_kana', 'category', 'spec',
+            'maker', 'unit', 'price', 'cost', 'tax_rate',
+            'has_stock', 'status', 'remarks',
+        ]);
+
+        return Inertia::render('Products/Create', [
+            'categories' => Product::CATEGORIES,
+            'taxRates' => Product::TAX_RATES,
+            'statuses' => Product::STATUSES,
+            'prefill' => $prefill,
+        ]);
+    }
+
     public function store(ProductRequest $request): RedirectResponse
     {
         Product::create($request->validated());

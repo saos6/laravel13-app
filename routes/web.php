@@ -26,10 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 得意先マスタ
     Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
+    Route::get('customers/{customer}/replicate', [CustomerController::class, 'replicate'])->name('customers.replicate');
     Route::resource('customers', CustomerController::class)->except(['show']);
 
     // 商品マスタ
     Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
+    Route::get('products/{product}/replicate', [ProductController::class, 'replicate'])->name('products.replicate');
     Route::resource('products', ProductController::class)->except(['show']);
 
     // 見積
