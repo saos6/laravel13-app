@@ -7,7 +7,7 @@
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-        font-family: 'IPAexGothic', 'MS Gothic', 'Hiragino Kaku Gothic Pro', sans-serif;
+        font-family: 'ipaexg', sans-serif;
         font-size: 11px;
         color: #1a1a1a;
         background: #fff;

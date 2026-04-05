@@ -110,6 +110,7 @@ return [
         /**
          * Whether to enable font subsetting or not.
          */
+
         'enable_font_subsetting' => true,
 
         /**
