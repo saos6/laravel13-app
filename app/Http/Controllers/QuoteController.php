@@ -67,6 +67,35 @@ class QuoteController extends Controller
         return redirect()->route('quotes.index')->with('success', '見積を登録しました。');
     }
 
+    public function replicate(Quote $quote): Response
+    {
+        abort_if($quote->is_deleted, 404);
+        $quote->load('items');
+
+        $prefill = [
+            'customer_id' => (string) $quote->customer_id,
+            'employee_id' => $quote->employee_id ? (string) $quote->employee_id : '',
+            'subject' => $quote->subject,
+            'remarks' => $quote->remarks ?? '',
+            'items' => $quote->items->map(fn ($item) => [
+                'product_id' => $item->product_id,
+                'product_name' => $item->product_name,
+                'spec' => $item->spec ?? '',
+                'quantity' => $item->quantity,
+                'unit' => $item->unit ?? '',
+                'unit_price' => $item->unit_price,
+                'tax_rate' => $item->tax_rate,
+                'amount' => (float) $item->amount,
+                'remarks' => $item->remarks ?? '',
+            ])->values()->all(),
+        ];
+
+        return Inertia::render('Quotes/Create', array_merge(
+            $this->formData(),
+            ['prefill' => $prefill]
+        ));
+    }
+
     public function show(Quote $quote): Response
     {
         abort_if($quote->is_deleted, 404);

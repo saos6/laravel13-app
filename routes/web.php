@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 見積
     Route::get('quotes/export', [QuoteController::class, 'exportMethod'])->name('quotes.export');
+    Route::get('quotes/{quote}/replicate', [QuoteController::class, 'replicate'])->name('quotes.replicate');
     Route::resource('quotes', QuoteController::class);
 });
 
